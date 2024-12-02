@@ -3,4 +3,6 @@ project(mario_game)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(mario_game main.cpp)
+add_executable(mario_game main.cpp
+        player/player.cpp
+        player/player.h)
