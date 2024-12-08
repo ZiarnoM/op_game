@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <player.h>
 
 class Game
 {
@@ -13,5 +14,5 @@ private:
     void processEvents();
 
     sf::RenderWindow window;
-    sf::CircleShape player;
+    Player player;
 };

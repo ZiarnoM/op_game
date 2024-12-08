@@ -1,8 +1,20 @@
-//
-// Created by Michal Zarnowski on 02/12/2024.
-//
+#pragma once
+#include <SFML/Graphics.hpp>
 
-#ifndef MARIO_GAME_PLAYER_H
-#define MARIO_GAME_PLAYER_H
+class Player
+{
+public:
+    Player();
+    Player(float x, float y, sf::Color color);
 
-#endif //MARIO_GAME_PLAYER_H
+    sf::Vector2f getPosition();
+    sf::Color getColor();
+
+    void setPosition(float x, float y);
+    void setColor(sf::Color color);
+
+    void draw(sf::RenderWindow &window);
+
+private:
+    sf::RectangleShape shape;
+};

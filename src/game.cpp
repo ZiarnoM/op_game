@@ -1,9 +1,11 @@
 #include <game.h>
 
-Game::Game() : window(sf::VideoMode(800, 600), "OP Game"), player(50.f)
+const float STARTING_X = 50.f;
+const float STARTING_Y = 50.f;
+const sf::Color STARTING_COLOR = sf::Color::Blue;
+
+Game::Game() : window(sf::VideoMode(800, 600), "OP Game"), player(400.f - STARTING_X, 300.f - STARTING_Y, STARTING_COLOR)
 {
-    player.setFillColor(sf::Color::Blue);
-    player.setPosition(400.f - player.getRadius(), 300.f - player.getRadius());
 }
 
 void Game::run()
@@ -30,6 +32,6 @@ void Game::processEvents()
 void Game::render()
 {
     window.clear();
-    window.draw(player);
+    player.draw(window);
     window.display();
 }
