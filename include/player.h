@@ -1,6 +1,15 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 
+enum MovementState
+{
+    Idle,
+    RunLeft,
+    RunRight,
+    Jump,
+    Fall
+};
+
 class Player
 {
 public:
@@ -15,8 +24,8 @@ public:
     float getSpeed();
     void setSpeed(float value);
 
-    bool getIsMoving();
-    void setIsMoving(bool value);
+    bool getMovementState();
+    void setMovementState(MovementState value);
 
 private:
     // initialization
@@ -31,10 +40,11 @@ private:
     void updateAnimations();
 
     // fields
-    bool isMoving;
+    MovementState state;
     float speed;
     sf::Clock animationTimer;
     sf::IntRect currentFrame;
     sf::Sprite sprite;
     sf::Texture idleSheet;
+    sf::Texture runSheet;
 };
