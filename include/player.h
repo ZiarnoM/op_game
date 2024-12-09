@@ -19,7 +19,13 @@ public:
     // general methods
     void update();
     void render(sf::RenderTarget &target);
+    const sf::FloatRect getGlobalBounds() const;
 
+    // exposed modifiers
+    void resetVelocityY();
+
+    // getters and setters
+    void setPosition(const float x, const float y);
     bool getMovementState();
     void setMovementState(MovementState value);
 
@@ -40,7 +46,6 @@ private:
     void updateAnimations();
 
     // fields
-
     sf::Vector2f velocity;
     float minVelocity;
     float maxVelocity;

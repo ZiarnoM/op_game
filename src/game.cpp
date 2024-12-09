@@ -57,12 +57,24 @@ void Game::render()
 void Game::update()
 {
     this->updatePlayer();
+    this->updatePlayerCollision();
 }
 
 // player stuff
 void Game::updatePlayer()
 {
     this->player->update();
+}
+
+void Game::updatePlayerCollision()
+{
+    if (this->player->getGlobalBounds().top + this->player->getGlobalBounds().height > this->window.getSize().y)
+    {
+        this->player->resetVelocityY();
+        this->player->setPosition(
+            this->player->getGlobalBounds().left,
+            this->window.getSize().y - this->player->getGlobalBounds().height);
+    }
 }
 
 void Game::renderPlayer()

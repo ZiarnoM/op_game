@@ -28,6 +28,22 @@ void Player::render(sf::RenderTarget &target)
 {
     target.draw(this->sprite);
 }
+const sf::FloatRect Player::getGlobalBounds() const
+{
+    return this->sprite.getGlobalBounds();
+}
+
+// modifiers
+void Player::resetVelocityY()
+{
+    this->velocity.y = 0.f;
+}
+
+// getters and setters
+void Player::setPosition(const float x, const float y)
+{
+    this->sprite.setPosition(x, y);
+}
 
 bool Player::getMovementState()
 {
@@ -40,9 +56,7 @@ void Player::setMovementState(MovementState value)
 }
 
 // Private
-
 // initialization
-
 void Player::initVariables()
 {
 }

@@ -19,8 +19,11 @@ private:
     void render();
     void processEvents();
 
-    // player stuff
+    // updates
     void updatePlayer();
+    void updatePlayerCollision();
+
+    // renders
     void renderPlayer();
 
     sf::RenderWindow window;
