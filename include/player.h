@@ -15,16 +15,26 @@ public:
     float getSpeed();
     void setSpeed(float value);
 
+    bool getIsMoving();
+    void setIsMoving(bool value);
+
 private:
     // initialization
+    void initVariables();
     void initTextures();
     void initSprite();
+    void initAnimations();
 
-    // updates
+    // Movement
     void updateMovement();
+    // Animations
+    void updateAnimations();
 
     // fields
+    bool isMoving;
     float speed;
+    sf::Clock animationTimer;
+    sf::IntRect currentFrame;
     sf::Sprite sprite;
     sf::Texture idleSheet;
 };
