@@ -6,6 +6,7 @@ class Player
 public:
     Player();
     Player(float x, float y, sf::Color color);
+    virtual ~Player();
 
     sf::Vector2f getPosition();
     sf::Color getColor();
@@ -13,7 +14,8 @@ public:
     void setPosition(float x, float y);
     void setColor(sf::Color color);
 
-    void draw(sf::RenderWindow &window);
+    void update();
+    void render(sf::RenderTarget &target);
 
 private:
     sf::RectangleShape shape;
