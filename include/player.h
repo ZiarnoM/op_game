@@ -20,10 +20,6 @@ public:
     void update();
     void render(sf::RenderTarget &target);
 
-    // getters and setters
-    float getSpeed();
-    void setSpeed(float value);
-
     bool getMovementState();
     void setMovementState(MovementState value);
 
@@ -33,15 +29,25 @@ private:
     void initTextures();
     void initSprite();
     void initAnimations();
+    void initPhysics();
 
     // Movement
+    void move(const float dir_x, const float dir_y);
     void updateMovement();
+    void updatePhysics();
+
     // Animations
     void updateAnimations();
 
     // fields
-    MovementState state;
-    float speed;
+
+    sf::Vector2f velocity;
+    float min_velocity;
+    float max_velocity;
+    float acceleration_rate;
+    float deceleration_rate;
+
+    MovementState animationState;
     sf::Clock animationTimer;
     sf::IntRect currentFrame;
     sf::Sprite sprite;

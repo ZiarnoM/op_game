@@ -9,6 +9,7 @@ Player::Player()
     this->initTextures();
     this->initSprite();
     this->initAnimations();
+    this->initPhysics();
 }
 
 Player::~Player()
@@ -20,36 +21,22 @@ void Player::update()
 {
     this->updateMovement();
     this->updateAnimations();
+    this->updatePhysics();
 }
 
 void Player::render(sf::RenderTarget &target)
 {
     target.draw(this->sprite);
-
-    // sf::CircleShape circle;
-    // circle.setFillColor(sf::Color::Red);
-    // circle.setRadius(sf::Color::Red);
-    // circle.setFillColor(sf::Color::Red);
-}
-
-float Player::getSpeed()
-{
-    return this->speed;
-}
-
-void Player::setSpeed(float value)
-{
-    this->speed = value;
 }
 
 bool Player::getMovementState()
 {
-    return this->state;
+    return this->animationState;
 }
 
 void Player::setMovementState(MovementState value)
 {
-    this->state = value;
+    this->animationState = value;
 }
 
 // Private
@@ -58,8 +45,6 @@ void Player::setMovementState(MovementState value)
 
 void Player::initVariables()
 {
-    this->state = MovementState::Idle;
-    this->speed = 3.f;
 }
 
 void Player::initTextures()
@@ -82,23 +67,41 @@ void Player::initSprite()
 }
 void Player::initAnimations()
 {
+    this->animationState = MovementState::Idle;
     this->animationTimer.restart();
 }
 
+void Player::initPhysics()
+{
+    this->min_velocity = 0.1f;
+    this->max_velocity = 4.f;
+    this->acceleration_rate = 2.f;
+    this->deceleration_rate = 0.5f;
+}
+
 // Movement
+void Player::move(const float dir_x, const float dir_y)
+{
+    this->velocity.x += dir_x * this->acceleration_rate;
+    this->velocity.y += dir_y * this->acceleration_rate;
+    if (std::abs(this->velocity.x) > this->max_velocity)
+    {
+        this->velocity.x = this->max_velocity * ((this->velocity.x < 0.f) ? -1.f : 1.f); // if moving left already cap at Max * -1, inverse otherwise
+    }
+}
+
 void Player::updateMovement()
 {
     this->setMovementState(MovementState::Idle);
-    const float speed = this->getSpeed();
 
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
     {
-        this->sprite.move(-speed, 0.f);
+        this->move(-1.f, 0.f);
         this->setMovementState(MovementState::RunLeft);
     }
     else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
     {
-        this->sprite.move(speed, 0.f);
+        this->move(1.f, 0.f);
         this->setMovementState(MovementState::RunRight);
     }
     // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
@@ -113,6 +116,21 @@ void Player::updateMovement()
     // }
 }
 
+void Player::updatePhysics()
+{
+    this->velocity *= this->deceleration_rate;
+    if (std::abs(this->velocity.x) < this->min_velocity)
+    {
+        this->velocity.x = 0.f;
+    }
+    if (std::abs(this->velocity.y) < this->min_velocity)
+    {
+        this->velocity.y = 0.f;
+    }
+
+    this->sprite.move(this->velocity);
+}
+
 // Animations
 void Player::updateAnimations()
 {
@@ -122,7 +140,7 @@ void Player::updateAnimations()
 
     if (this->animationTimer.getElapsedTime().asMilliseconds() >= 50)
     {
-        switch (this->state)
+        switch (this->animationState)
         {
         case MovementState::Idle:
             this->sprite.setTexture(this->idleSheet);
@@ -153,7 +171,7 @@ void Player::updateAnimations()
                 this->currentFrame.left = 0;
             }
             this->sprite.setScale(-2.f, 2.f);
-            this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0.f);
+            this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0.f); // we change the reference point for the flip to fix teleports on turn
             break;
 
         default:
