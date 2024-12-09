@@ -73,20 +73,22 @@ void Player::initAnimations()
 
 void Player::initPhysics()
 {
-    this->min_velocity = 0.1f;
-    this->max_velocity = 4.f;
-    this->acceleration_rate = 2.f;
-    this->deceleration_rate = 0.5f;
+    this->minVelocity = 0.1f;
+    this->maxVelocity = 4.f;
+    this->accelerationRate = 2.f;
+    this->decelerationRate = 0.5f;
+    this->gravity = 5.f;
+    this->maxFallSpeed = 10.f;
 }
 
 // Movement
 void Player::move(const float dir_x, const float dir_y)
 {
-    this->velocity.x += dir_x * this->acceleration_rate;
-    this->velocity.y += dir_y * this->acceleration_rate;
-    if (std::abs(this->velocity.x) > this->max_velocity)
+    this->velocity.x += dir_x * this->accelerationRate;
+    this->velocity.y += dir_y * this->accelerationRate;
+    if (std::abs(this->velocity.x) > this->maxVelocity)
     {
-        this->velocity.x = this->max_velocity * ((this->velocity.x < 0.f) ? -1.f : 1.f); // if moving left already cap at Max * -1, inverse otherwise
+        this->velocity.x = this->maxVelocity * ((this->velocity.x < 0.f) ? -1.f : 1.f); // if moving left already cap at Max * -1, inverse otherwise
     }
 }
 
@@ -118,12 +120,20 @@ void Player::updateMovement()
 
 void Player::updatePhysics()
 {
-    this->velocity *= this->deceleration_rate;
-    if (std::abs(this->velocity.x) < this->min_velocity)
+    // gravity handling and limiting
+    this->velocity.y += this->gravity;
+    if (this->velocity.y > this->maxFallSpeed)
+    {
+        this->velocity.y = this->maxFallSpeed;
+    }
+
+    // slowing down for smooth movement
+    this->velocity *= this->decelerationRate;
+    if (std::abs(this->velocity.x) < this->minVelocity)
     {
         this->velocity.x = 0.f;
     }
-    if (std::abs(this->velocity.y) < this->min_velocity)
+    if (std::abs(this->velocity.y) < this->minVelocity)
     {
         this->velocity.y = 0.f;
     }

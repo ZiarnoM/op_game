@@ -42,10 +42,12 @@ private:
     // fields
 
     sf::Vector2f velocity;
-    float min_velocity;
-    float max_velocity;
-    float acceleration_rate;
-    float deceleration_rate;
+    float minVelocity;
+    float maxVelocity;
+    float accelerationRate;
+    float decelerationRate;
+    float gravity;
+    float maxFallSpeed;
 
     MovementState animationState;
     sf::Clock animationTimer;
