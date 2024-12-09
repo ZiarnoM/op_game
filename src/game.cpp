@@ -1,17 +1,16 @@
 #include <game.h>
 
-const float STARTING_X = 50.f;
-const float STARTING_Y = 50.f;
-const sf::Color STARTING_COLOR = sf::Color::Blue;
+// public methods
 
-void Game::initWindow()
+Game::Game()
 {
-    this->window.create(sf::VideoMode(800, 600), "OP Game");
+    this->initWindow();
+    this->initPlayer();
 }
 
-void Game::initPlayer()
+Game::~Game()
 {
-    this->player = new Player(400.f - STARTING_X, 300.f - STARTING_Y, STARTING_COLOR);
+    delete this->player;
 }
 
 void Game::run()
@@ -23,7 +22,19 @@ void Game::run()
         this->render();
     }
 }
+// initialization
+void Game::initWindow()
+{
+    this->window.create(sf::VideoMode(800, 600), "OP Game");
+    this->window.setFramerateLimit(144);
+}
 
+void Game::initPlayer()
+{
+    this->player = new Player();
+}
+
+// main loop handling
 void Game::processEvents()
 {
     sf::Event event;
@@ -48,6 +59,7 @@ void Game::update()
     this->updatePlayer();
 }
 
+// player stuff
 void Game::updatePlayer()
 {
     this->player->update();
@@ -56,15 +68,4 @@ void Game::updatePlayer()
 void Game::renderPlayer()
 {
     this->player->render(this->window);
-}
-
-Game::Game()
-{
-    this->initWindow();
-    this->initPlayer();
-}
-
-Game::~Game()
-{
-    delete this->player;
 }

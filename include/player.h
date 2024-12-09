@@ -5,18 +5,26 @@ class Player
 {
 public:
     Player();
-    Player(float x, float y, sf::Color color);
     virtual ~Player();
 
-    sf::Vector2f getPosition();
-    sf::Color getColor();
-
-    void setPosition(float x, float y);
-    void setColor(sf::Color color);
-
+    // general methods
     void update();
     void render(sf::RenderTarget &target);
 
+    // getters and setters
+    float getSpeed();
+    void setSpeed(float value);
+
 private:
-    sf::RectangleShape shape;
+    // initialization
+    void initTextures();
+    void initSprite();
+
+    // updates
+    void updateMovement();
+
+    // fields
+    float speed;
+    sf::Sprite sprite;
+    sf::Texture idleSheet;
 };
