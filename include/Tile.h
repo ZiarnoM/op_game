@@ -1,5 +1,7 @@
+#pragma once
 #define OP_GAME_TILE_H
 #include <SFML/Graphics.hpp>
+
 
 class Tile {
 private:

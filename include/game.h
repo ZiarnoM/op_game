@@ -39,4 +39,6 @@ private:
     TileMap* tileMap;
 
     std::map<std::string,sf::Keyboard::Key> keyboardMappings;
+
+    void loadLevel(TileMap* tileMap, const std::string& filename);
 };

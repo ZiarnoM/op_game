@@ -1,5 +1,6 @@
 #include <game.h>
 #include <iostream>
+#include "LevelLoader.h"
 
 // public methods
 
@@ -93,20 +94,15 @@ void Game::renderPlayer()
 
 void Game::initTileSheet()
 {
-    if (!this->tileSheet.loadFromFile("../assets/images/terrain/Terrain (16x16).png"))
+    if (!this->tileSheet.loadFromFile("../assets/images/terrain/terrainSheet.png"))
     {
         std::cerr << "Error loading tile sheet" << std::endl;
     }
 }
 
 void Game::initTileMap() {
-
-    this->tileMap = new TileMap(50, 40, &this->tileSheet, 32);
-
-    this->tileMap->addTile(0, 0);
-    this->tileMap->addTile(3, 0);
-    this->tileMap->addTile(0, 40);
-    this->tileMap->addTile(50, 40);
+    this->tileMap = new TileMap(50, 40, &this->tileSheet, 16);
+    LevelLoader::loadLevel(this->tileMap, "../assets/levels/map1.json");
 }
 
 void Game::updateTileMap() {
@@ -143,3 +139,5 @@ void Game::updateInput() {
         }
     }
 }
+
+

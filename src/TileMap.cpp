@@ -32,10 +32,10 @@ TileMap::~TileMap() {
     }
 }
 
-void TileMap::addTile(const unsigned x, const unsigned y) {
-    if(x < this->map.size() && x >= 0 && y < this->map[x].size() && y >= 0){
-        if(this->map[x][y] == nullptr){
-            this->map[x][y] = new Tile(x,y,this->tileSize,this->tileSheet, sf::IntRect(0, 0, this->tileSize, this->tileSize), false);
+void TileMap::addTile(const unsigned x, const unsigned y, const sf::IntRect& textureRect) {
+    if (x < this->map.size() && x >= 0 && y < this->map[x].size() && y >= 0) {
+        if (this->map[x][y] == nullptr) {
+            this->map[x][y] = new Tile(x, y, this->tileSize, this->tileSheet, textureRect, false);
         }
     }
 }

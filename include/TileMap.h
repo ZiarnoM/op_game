@@ -1,3 +1,4 @@
+#pragma once
 #define OP_GAME_TILEMAP_H
 #include "Tile.h"
 
@@ -13,7 +14,7 @@ public:
     ~TileMap();
 
     inline const unsigned& getTileSize() const { return this->tileSize; }
-    void addTile(const unsigned x, const unsigned y);
+    void addTile(const unsigned x, const unsigned y, const sf::IntRect& textureRect);
     void removeTile(const unsigned x, const unsigned y);
 
     void update();
