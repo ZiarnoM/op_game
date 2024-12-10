@@ -1,5 +1,5 @@
 cmake-build-debug
 /build/
 .vscode
-.Ds_Store
+.DS_Store
 .idea
