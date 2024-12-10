@@ -35,7 +35,7 @@ TileMap::~TileMap() {
 void TileMap::addTile(const unsigned x, const unsigned y, const sf::IntRect& textureRect) {
     if (x < this->map.size() && x >= 0 && y < this->map[x].size() && y >= 0) {
         if (this->map[x][y] == nullptr) {
-            this->map[x][y] = new Tile(x, y, this->tileSize, this->tileSheet, textureRect, false);
+            this->map[x][y] = new Tile(x, y, this->tileSize, this->tileSheet, textureRect, true);
         }
     }
 }
