@@ -1,6 +1,5 @@
 #include "LevelLoader.h"
 #include <fstream>
-#include <iostream>
 
 void LevelLoader::loadLevel(TileMap* tileMap, const std::string& filename) {
     std::ifstream file(filename);
@@ -13,7 +12,6 @@ void LevelLoader::loadLevel(TileMap* tileMap, const std::string& filename) {
 
     const auto& layer = levelData["layers"][0];
     const auto& tiles = layer["data"];
-    std::cout<<tiles<<std::endl;
     unsigned width = layer["width"];
     unsigned height = layer["height"];
 

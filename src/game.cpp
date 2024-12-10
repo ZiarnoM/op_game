@@ -7,6 +7,7 @@
 Game::Game()
 {
     this->initWindow();
+    this->initBackground();
     this->initInput();
     this->initPlayer();
     this->initTileSheet();
@@ -56,6 +57,7 @@ void Game::processEvents()
 void Game::render()
 {
     this->window.clear();
+    this->renderBackground();
     this->renderTileMap();
     this->renderPlayer();
     this->window.display();
@@ -111,6 +113,25 @@ void Game::updateTileMap() {
 
 void Game::renderTileMap() {
     this->tileMap->render(this->window);
+}
+
+void Game::initBackground() {
+    if (!this->backgroundTexture.loadFromFile("../assets/images/background/blue.png")) {
+        std::cerr << "Error loading background texture" << std::endl;
+    }
+    this->backgroundSprite.setTexture(this->backgroundTexture);
+}
+
+void Game::renderBackground() {
+    sf::Vector2u textureSize = this->backgroundTexture.getSize();
+    sf::Vector2u windowSize = this->window.getSize();
+
+    for (unsigned x = 0; x < windowSize.x; x += textureSize.x) {
+        for (unsigned y = 0; y < windowSize.y; y += textureSize.y) {
+            this->backgroundSprite.setPosition(x, y);
+            this->window.draw(this->backgroundSprite);
+        }
+    }
 }
 
 void Game::initInput() {

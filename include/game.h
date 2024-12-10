@@ -17,6 +17,7 @@ private:
     void initTileSheet();
     void initTileMap();
     void initInput();
+    void initBackground();
 
     // main loop handling
     void update();
@@ -32,13 +33,17 @@ private:
     // renders
     void renderPlayer();
     void renderTileMap();
+    void renderBackground();
 
     sf::RenderWindow window;
     Player *player;
     sf::Texture tileSheet;
     TileMap* tileMap;
+    sf::Texture backgroundTexture;
+    sf::Sprite backgroundSprite;
 
     std::map<std::string,sf::Keyboard::Key> keyboardMappings;
+
 
     void loadLevel(TileMap* tileMap, const std::string& filename);
 };
