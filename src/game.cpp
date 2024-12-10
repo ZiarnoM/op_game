@@ -86,6 +86,15 @@ void Game::updatePlayerCollision()
             this->player->getGlobalBounds().left,
             this->window.getSize().y - this->player->getGlobalBounds().height);
     }
+    if(this->player->getGlobalBounds().left < 0.f)
+    {
+        this->player->setPosition(0.f, this->player->getGlobalBounds().top);
+    }
+    if(this->player->getGlobalBounds().left + this->player->getGlobalBounds().width > this->window.getSize().x)
+    {
+        this->player->setPosition(this->window.getSize().x - this->player->getGlobalBounds().width, this->player->getGlobalBounds().top);
+    }
+
 }
 
 void Game::renderPlayer()
