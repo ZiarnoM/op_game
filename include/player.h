@@ -28,6 +28,10 @@ public:
     void setPosition(const float x, const float y);
     bool getMovementState();
     void setMovementState(MovementState value);
+    inline const bool& getCanJump() const { return this->canJump; }
+    inline void setCanJump(const bool value) { this->canJump = value; }
+    void move(const float dir_x, const float dir_y);
+    void jump();
 
 private:
     // initialization
@@ -38,7 +42,7 @@ private:
     void initPhysics();
 
     // Movement
-    void move(const float dir_x, const float dir_y);
+
     void updateMovement();
     void updatePhysics();
 
@@ -53,6 +57,7 @@ private:
     float decelerationRate;
     float gravity;
     float maxFallSpeed;
+    bool canJump;
 
     MovementState animationState;
     sf::Clock animationTimer;

@@ -91,8 +91,9 @@ void Player::initPhysics()
     this->maxVelocity = 4.f;
     this->accelerationRate = 2.f;
     this->decelerationRate = 0.5f;
-    this->gravity = 5.f;
-    this->maxFallSpeed = 10.f;
+    this->gravity = 1.f;
+    this->maxFallSpeed = 5.f;
+    this->canJump = true;
 }
 
 // Movement
@@ -106,49 +107,59 @@ void Player::move(const float dir_x, const float dir_y)
     }
 }
 
-void Player::updateMovement()
+void Player::jump()
 {
-    this->setMovementState(MovementState::Idle);
-
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::A))
-    {
-        this->move(-1.f, 0.f);
-        this->setMovementState(MovementState::RunLeft);
-    }
-    else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::D))
-    {
-        this->move(1.f, 0.f);
-        this->setMovementState(MovementState::RunRight);
-    }
-    // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::W))
-    // {
-    //     this->sprite.move(0.f, -speed);
-    //     this->setMovementState(MovementState::Run);
-    // }
-    // else if (sf::Keyboard::isKeyPressed(sf::Keyboard::Key::S))
-    // {
-    //     this->sprite.move(0.f, speed);
-    //     this->setMovementState(MovementState::Run);
-    // }
+    this->velocity.y = -35.f;
+    this->setCanJump(false);
 }
 
-void Player::updatePhysics()
+void Player::updateMovement()
 {
-    // gravity handling and limiting
-    this->velocity.y += this->gravity;
-    if (this->velocity.y > this->maxFallSpeed)
+    if(this->velocity.x > 0.f)
     {
+        this->setMovementState(MovementState::RunRight);
+    }
+    else if(this->velocity.x < 0.f)
+    {
+        this->setMovementState(MovementState::RunLeft);
+    }
+    else if(this->velocity.y < 0.f)
+    {
+        this->setMovementState(MovementState::Jump);
+    }
+    else if(this->velocity.y > 0.f)
+    {
+        this->setMovementState(MovementState::Fall);
+    }
+    else
+    {
+        this->setMovementState(MovementState::Idle);
+    }
+}
+
+void Player::updatePhysics() {
+    // Apply gravity
+    this->velocity.y += this->gravity;
+    if (this->velocity.y > this->maxFallSpeed) {
         this->velocity.y = this->maxFallSpeed;
     }
 
-    // slowing down for smooth movement
+    // Update position
+    this->sprite.move(0.f, this->velocity.y);
+
+    // Check if the player has landed
+    if (this->sprite.getPosition().y + this->sprite.getGlobalBounds().height >= 640) { // Assuming ground level is at y = 640
+        this->velocity.y = 0.f;
+        this->canJump = true;
+        this->sprite.setPosition(this->sprite.getPosition().x, 640 - this->sprite.getGlobalBounds().height);
+    }
+
+    // Slowing down for smooth movement
     this->velocity *= this->decelerationRate;
-    if (std::abs(this->velocity.x) < this->minVelocity)
-    {
+    if (std::abs(this->velocity.x) < this->minVelocity) {
         this->velocity.x = 0.f;
     }
-    if (std::abs(this->velocity.y) < this->minVelocity)
-    {
+    if (std::abs(this->velocity.y) < this->minVelocity) {
         this->velocity.y = 0.f;
     }
 
