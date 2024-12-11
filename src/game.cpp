@@ -107,11 +107,23 @@ void Game::updatePlayerCollision()
     }
     if(this->player->getGlobalBounds().left < 0.f)
     {
+//check for level numbe
+        if(this->tileMap->curreentLevel > 0){
+            this->tileMap->curreentLevel--;
+            this->player->setPosition(this->window.getSize().x - this->player->getGlobalBounds().width, this->player->getGlobalBounds().top);
+        }else{
         this->player->setPosition(0.f, this->player->getGlobalBounds().top);
+            }
     }
     if(this->player->getGlobalBounds().left + this->player->getGlobalBounds().width > this->window.getSize().x)
     {
-        this->player->setPosition(this->window.getSize().x - this->player->getGlobalBounds().width, this->player->getGlobalBounds().top);
+//        check for level number and teleport to next level on left side
+        if(this->tileMap->curreentLevel < this->tileMap->numberOfLevels-1){
+            this->tileMap->curreentLevel++;
+            this->player->setPosition(0.f, this->player->getGlobalBounds().top);
+        }else{
+            this->player->setPosition(this->window.getSize().x - this->player->getGlobalBounds().width, this->player->getGlobalBounds().top);
+        }
     }
 
 }
@@ -132,7 +144,7 @@ void Game::initTileSheet()
 
 void Game::initTileMap() {
     this->tileMap = new TileMap(50, 40, &this->tileSheet, 16);
-    LevelLoader::loadLevel(this->tileMap, "../assets/levels/map1.json");
+    LevelLoader::loadLevel(this->tileMap, "../assets/levels/level1.json");
 }
 
 void Game::updateTileMap() {

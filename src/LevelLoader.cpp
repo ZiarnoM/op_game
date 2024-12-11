@@ -10,21 +10,29 @@ void LevelLoader::loadLevel(TileMap* tileMap, const std::string& filename) {
     file >> levelData;
     file.close();
 
-    const auto& layer = levelData["layers"][0];
-    const auto& tiles = layer["data"];
-    unsigned width = layer["width"];
-    unsigned height = layer["height"];
+    const auto& numberOfLevels = levelData["layers"].size();
+    for (int i = 0; i < numberOfLevels-2; i++) {
+        tileMap->addLevel();
+    }
 
-    for (unsigned y = 0; y < height; ++y) {
-        for (unsigned x = 0; x < width; ++x) {
-            unsigned tileIndex = y * width + x;
-            unsigned tileId = tiles[tileIndex];
-            if (tileId != 0) {
-                unsigned textureX = (tileId - 1) % 22 * tileMap->getTileSize();
-                unsigned textureY = (tileId - 1) / 22 * tileMap->getTileSize();
-                sf::IntRect textureRect(textureX, textureY, tileMap->getTileSize(), tileMap->getTileSize());
-                tileMap->addTile(x, y, textureRect);
+    for(int i = 0; i < numberOfLevels-1; i++){
+        const auto& layer = levelData["layers"][i];
+        const auto& tiles = layer["data"];
+        unsigned width = layer["width"];
+        unsigned height = layer["height"];
+
+        for (unsigned y = 0; y < height; ++y) {
+            for (unsigned x = 0; x < width; ++x) {
+                unsigned tileIndex = y * width + x;
+                unsigned tileId = tiles[tileIndex];
+                if (tileId != 0) {
+                    unsigned textureX = (tileId - 1) % 22 * tileMap->getTileSize();
+                    unsigned textureY = (tileId - 1) / 22 * tileMap->getTileSize();
+                    sf::IntRect textureRect(textureX, textureY, tileMap->getTileSize(), tileMap->getTileSize());
+                    tileMap->addTile(x, y, textureRect, i);
+                }
             }
         }
     }
+
 }

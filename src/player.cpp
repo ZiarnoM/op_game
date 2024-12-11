@@ -88,7 +88,7 @@ void Player::initAnimations()
 void Player::initPhysics()
 {
     this->minVelocity = 0.1f;
-    this->maxVelocity = 4.f;
+    this->maxVelocity = 20.f;
     this->accelerationRate = 2.f;
     this->decelerationRate = 0.5f;
     this->gravity = 1.f;
