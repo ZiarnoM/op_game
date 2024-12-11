@@ -12,6 +12,8 @@ Game::Game()
     this->initPlayer();
     this->initTileSheet();
     this->initTileMap();
+    this->initStartMenu();
+    this->isMenuActive = true;
 }
 
 Game::~Game()
@@ -42,33 +44,50 @@ void Game::initPlayer()
 }
 
 // main loop handling
-void Game::processEvents()
-{
+void Game::processEvents() {
     sf::Event event;
-    while (this->window.pollEvent(event))
-    {
-        if (event.type == sf::Event::Closed)
-        {
+    while (this->window.pollEvent(event)) {
+        if (event.type == sf::Event::Closed) {
             this->window.close();
+        }
+        if (this->isMenuActive) {
+            if (event.type == sf::Event::KeyPressed) {
+                if (event.key.code == sf::Keyboard::Up) {
+                    this->startMenu->MoveUp();
+                } else if (event.key.code == sf::Keyboard::Down) {
+                    this->startMenu->MoveDown();
+                } else if (event.key.code == sf::Keyboard::Enter) {
+                    int selectedItem = this->startMenu->GetPressedItem();
+                    if (selectedItem == 0) {
+                        this->isMenuActive = false;
+                    } else if (selectedItem == 2) {
+                        this->window.close();
+                    }
+                }
+            }
         }
     }
 }
 
-void Game::render()
-{
+void Game::render() {
     this->window.clear();
     this->renderBackground();
-    this->renderTileMap();
-    this->renderPlayer();
+    if (this->isMenuActive) {
+        this->startMenu->draw(this->window);
+    } else {
+        this->renderTileMap();
+        this->renderPlayer();
+    }
     this->window.display();
 }
 
-void Game::update()
-{
-    this->updateInput();
-    this->updatePlayer();
-    this->updatePlayerCollision();
-    this->updateTileMap();
+void Game::update() {
+    if (!this->isMenuActive) {
+        this->updateInput();
+        this->updatePlayer();
+        this->updatePlayerCollision();
+        this->updateTileMap();
+    }
 }
 
 // player stuff
@@ -168,6 +187,10 @@ void Game::updateInput() {
             this->player->setMovementState(MovementState::Jump);
         }
     }
+}
+
+void Game::initStartMenu() {
+    this->startMenu = new StartMenu(800, 640);
 }
 
 

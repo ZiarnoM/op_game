@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 #include <player.h>
 #include "TileMap.h"
+#include "StartMenu.h"
 
 class Game
 {
@@ -18,6 +19,7 @@ private:
     void initTileMap();
     void initInput();
     void initBackground();
+    void initStartMenu();
 
     // main loop handling
     void update();
@@ -37,10 +39,15 @@ private:
 
     sf::RenderWindow window;
     Player *player;
+
     sf::Texture tileSheet;
     TileMap* tileMap;
+
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite;
+
+    StartMenu* startMenu;
+    bool isMenuActive;
 
     std::map<std::string,sf::Keyboard::Key> keyboardMappings;
 
