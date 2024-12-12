@@ -12,6 +12,8 @@ add_executable(op_game ${SOURCES}
         src/LevelLoader.cpp
         include/LevelLoader.h
         src/StartMenu.cpp
-        include/StartMenu.h)
+        include/StartMenu.h
+        src/OptionsMenu.cpp
+        include/OptionsMenu.h)
 
 target_link_libraries(op_game sfml-system sfml-window sfml-graphics)

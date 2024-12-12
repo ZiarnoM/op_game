@@ -6,17 +6,22 @@
 
 class StartMenu {
 
+private:
+    sf::Font font;
+    sf::Text title;
+    sf::Text playButton;
+    sf::Text optionsButton;
+    sf::Text exitButton;
+
 public:
     StartMenu(float width, float height);
+    ~StartMenu();
     void draw(sf::RenderWindow &window);
-    void MoveUp();
-    void MoveDown();
-    int GetPressedItem() { return selectedItemIndex; }
+    int GetPressedItem();
+    bool isOptionButtonPressed(sf::Vector2i mousePos);
+    bool isPlayButtonPressed(sf::Vector2i mousePos);
+    bool isExitButtonPressed(sf::Vector2i mousePos);
 
-private:
-    int selectedItemIndex;
-    sf::Font font;
-    std::vector<sf::Text> menuItems;
 };
 
 

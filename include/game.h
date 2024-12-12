@@ -3,6 +3,7 @@
 #include <player.h>
 #include "TileMap.h"
 #include "StartMenu.h"
+#include "OptionsMenu.h"
 
 class Game
 {
@@ -20,6 +21,7 @@ private:
     void initInput();
     void initBackground();
     void initStartMenu();
+    void initOptionsMenu();
 
     // main loop handling
     void update();
@@ -31,11 +33,13 @@ private:
     void updatePlayerCollision();
     void updateTileMap();
     void updateInput();
+    void updateMenu();
 
     // renders
     void renderPlayer();
     void renderTileMap();
     void renderBackground();
+    void renderMenu();
 
     sf::RenderWindow window;
     Player *player;
@@ -48,6 +52,12 @@ private:
 
     StartMenu* startMenu;
     bool isMenuActive;
+    OptionsMenu* optionsMenu;
+    enum class MenuState
+    {
+        StartMenu,
+        OptionsMenu
+    } menuState;
 
     std::map<std::string,sf::Keyboard::Key> keyboardMappings;
 

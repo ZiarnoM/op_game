@@ -13,6 +13,7 @@ Game::Game()
     this->initTileSheet();
     this->initTileMap();
     this->initStartMenu();
+    this->initOptionsMenu();
     this->isMenuActive = true;
 }
 
@@ -24,11 +25,15 @@ Game::~Game()
 
 void Game::run()
 {
-    while (this->window.isOpen())
-    {
+    while (this->window.isOpen()) {
         this->processEvents();
-        this->update();
-        this->render();
+        if (this->isMenuActive) {
+            this->updateMenu();
+            this->renderMenu();
+        } else {
+            this->update();
+            this->render();
+        }
     }
 }
 // initialization
@@ -51,19 +56,22 @@ void Game::processEvents() {
             this->window.close();
         }
         if (this->isMenuActive) {
-            if (event.type == sf::Event::KeyPressed) {
-                if (event.key.code == sf::Keyboard::Up) {
-                    this->startMenu->MoveUp();
-                } else if (event.key.code == sf::Keyboard::Down) {
-                    this->startMenu->MoveDown();
-                } else if (event.key.code == sf::Keyboard::Enter) {
-                    int selectedItem = this->startMenu->GetPressedItem();
-                    if (selectedItem == 0) {
+            if (event.type == sf::Event::MouseButtonPressed) {
+                sf::Vector2i mousePos = sf::Mouse::getPosition(this->window);
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    if (this->startMenu->isOptionButtonPressed(mousePos)) {
+                        this->menuState = MenuState::OptionsMenu;
+                    } else if (this->startMenu->isPlayButtonPressed(mousePos)) {
                         this->isMenuActive = false;
-                    } else if (selectedItem == 2) {
+                    } else if (this->startMenu->isExitButtonPressed(mousePos)) {
                         this->window.close();
                     }
                 }
+            }
+        } else {
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                this->isMenuActive = true;
+                this->menuState = MenuState::StartMenu;
             }
         }
     }
@@ -205,4 +213,31 @@ void Game::initStartMenu() {
     this->startMenu = new StartMenu(800, 640);
 }
 
+void Game::initOptionsMenu() {
+    this->optionsMenu = new OptionsMenu(800, 640);
+}
+
+void Game::updateMenu() {
+    sf::Vector2i mousePos = sf::Mouse::getPosition(window);
+
+    if (menuState == MenuState::StartMenu) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && startMenu->isOptionButtonPressed(mousePos)) {
+            menuState = MenuState::OptionsMenu;
+        }
+    } else if (menuState == MenuState::OptionsMenu) {
+        if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && optionsMenu->isBackButtonPressed(mousePos)) {
+            menuState = MenuState::StartMenu;
+        }
+    }
+}
+
+void Game::renderMenu() {
+    window.clear();
+    if (menuState == MenuState::StartMenu) {
+        startMenu->draw(window);
+    } else if (menuState == MenuState::OptionsMenu) {
+        optionsMenu->render(window);
+    }
+    window.display();
+}
 
