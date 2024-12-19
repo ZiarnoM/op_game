@@ -28,7 +28,7 @@ public:
     void setPosition(const float x, const float y);
     bool getMovementState();
     void setMovementState(MovementState value);
-    inline const bool& getCanJump() const { return this->canJump; }
+    inline const bool &getCanJump() const { return this->canJump; }
     inline void setCanJump(const bool value) { this->canJump = value; }
     void move(const float dir_x, const float dir_y);
     void jump();

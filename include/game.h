@@ -31,6 +31,7 @@ private:
     // updates
     void updatePlayer();
     void updatePlayerCollision();
+    void updateLevel();
     void updateTileMap();
     void updateInput();
     void updateMenu();
@@ -45,22 +46,21 @@ private:
     Player *player;
 
     sf::Texture tileSheet;
-    TileMap* tileMap;
+    TileMap *tileMap;
 
     sf::Texture backgroundTexture;
     sf::Sprite backgroundSprite;
 
-    StartMenu* startMenu;
+    StartMenu *startMenu;
     bool isMenuActive;
-    OptionsMenu* optionsMenu;
+    OptionsMenu *optionsMenu;
     enum class MenuState
     {
         StartMenu,
         OptionsMenu
     } menuState;
 
-    std::map<std::string,sf::Keyboard::Key> keyboardMappings;
+    std::map<std::string, sf::Keyboard::Key> keyboardMappings;
 
-
-    void loadLevel(TileMap* tileMap, const std::string& filename);
+    void loadLevel(TileMap *tileMap, const std::string &filename);
 };
