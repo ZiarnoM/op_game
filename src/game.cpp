@@ -138,6 +138,49 @@ void Game::updatePlayerCollision()
             this->player->getGlobalBounds().left,
             this->window.getSize().y - this->player->getGlobalBounds().height);
     }
+    // Check for collision with tiles
+    for (int x = 0; x < 50; ++x)
+    {
+        for (int y = 0; y < 40; ++y)
+        {
+            Tile *tile = this->tileMap->getTile(this->tileMap->currentLevel, x, y);
+            if (tile)
+            {
+                sf::FloatRect playerBounds = this->player->getGlobalBounds();
+                sf::FloatRect tileBounds = tile->getGlobalBounds();
+
+                if (playerBounds.intersects(tileBounds))
+                {
+                    // Handle collision
+                    if (playerBounds.top < tileBounds.top && playerBounds.top + playerBounds.height < tileBounds.top + tileBounds.height && playerBounds.left < tileBounds.left + tileBounds.width && playerBounds.left + playerBounds.width > tileBounds.left)
+                    {
+                        // Collision from bottom
+                        this->player->resetVelocityY();
+                        this->player->setCanJump(true);
+                        this->player->setPosition(playerBounds.left, tileBounds.top - playerBounds.height);
+                    }
+                    else if (playerBounds.top > tileBounds.top && playerBounds.top + playerBounds.height > tileBounds.top + tileBounds.height && playerBounds.left < tileBounds.left + tileBounds.width && playerBounds.left + playerBounds.width > tileBounds.left)
+                    {
+                        // Collision from top
+                        this->player->resetVelocityY();
+                        this->player->setPosition(playerBounds.left, tileBounds.top + tileBounds.height);
+                    }
+                    else if (playerBounds.left < tileBounds.left && playerBounds.left + playerBounds.width < tileBounds.left + tileBounds.width && playerBounds.top < tileBounds.top + tileBounds.height && playerBounds.top + playerBounds.height > tileBounds.top)
+                    {
+                        // Collision from right
+                        this->player->resetVelocityX();
+                        this->player->setPosition(tileBounds.left - playerBounds.width, playerBounds.top);
+                    }
+                    else if (playerBounds.left > tileBounds.left && playerBounds.left + playerBounds.width > tileBounds.left + tileBounds.width && playerBounds.top < tileBounds.top + tileBounds.height && playerBounds.top + playerBounds.height > tileBounds.top)
+                    {
+                        // Collision from left
+                        this->player->resetVelocityX();
+                        this->player->setPosition(tileBounds.left + tileBounds.width, playerBounds.top);
+                    }
+                }
+            }
+        }
+    }
 }
 
 void Game::updateLevel()

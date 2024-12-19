@@ -44,6 +44,11 @@ void TileMap::addTile(const unsigned x, const unsigned y, const sf::IntRect &tex
     }
 }
 
+Tile *TileMap::getTile(int level, int x, int y)
+{
+    return this->map[level][x][y];
+}
+
 void TileMap::addLevel()
 {
     this->map.push_back(std::vector<std::vector<Tile *>>(this->map[0].size(), std::vector<Tile *>(this->map[0][0].size(), nullptr)));

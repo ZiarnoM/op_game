@@ -26,6 +26,13 @@ void Player::update()
 
 void Player::render(sf::RenderTarget &target)
 {
+    sf::RectangleShape hitbox;
+    hitbox.setPosition(this->sprite.getPosition());
+    hitbox.setSize(sf::Vector2f(this->sprite.getGlobalBounds().width, this->sprite.getGlobalBounds().height));
+    hitbox.setFillColor(sf::Color::Transparent);
+    hitbox.setOutlineColor(sf::Color::Red);
+    hitbox.setOutlineThickness(1.f);
+    target.draw(hitbox);
     target.draw(this->sprite);
 }
 const sf::FloatRect Player::getGlobalBounds() const
@@ -37,6 +44,11 @@ const sf::FloatRect Player::getGlobalBounds() const
 void Player::resetVelocityY()
 {
     this->velocity.y = 0.f;
+}
+
+void Player::resetVelocityX()
+{
+    this->velocity.x = 0.f;
 }
 
 // getters and setters
@@ -65,11 +77,15 @@ void Player::initTextures()
 {
     if (!this->idleSheet.loadFromFile("../assets/images/player/idleSheet.png"))
     {
-        std::cout << "Error while loading playerSheet.png" << std::endl;
+        std::cerr << "Error while loading playerSheet.png" << std::endl;
     }
     if (!this->runSheet.loadFromFile("../assets/images/player/runSheet.png"))
     {
-        std::cout << "Error while loading runSheet.png" << std::endl;
+        std::cerr << "Error while loading runSheet.png" << std::endl;
+    }
+    if (!this->fallSheet.loadFromFile("../assets/images/player/fall.png"))
+    {
+        std::cerr << "Error while loading fall.png" << std::endl;
     }
 }
 void Player::initSprite()
@@ -115,19 +131,19 @@ void Player::jump()
 
 void Player::updateMovement()
 {
-    if(this->velocity.x > 0.f)
+    if (this->velocity.x > 0.f)
     {
         this->setMovementState(MovementState::RunRight);
     }
-    else if(this->velocity.x < 0.f)
+    else if (this->velocity.x < 0.f)
     {
         this->setMovementState(MovementState::RunLeft);
     }
-    else if(this->velocity.y < 0.f)
+    else if (this->velocity.y < 0.f)
     {
         this->setMovementState(MovementState::Jump);
     }
-    else if(this->velocity.y > 0.f)
+    else if (this->velocity.y > 0.f)
     {
         this->setMovementState(MovementState::Fall);
     }
@@ -137,10 +153,12 @@ void Player::updateMovement()
     }
 }
 
-void Player::updatePhysics() {
+void Player::updatePhysics()
+{
     // Apply gravity
     this->velocity.y += this->gravity;
-    if (this->velocity.y > this->maxFallSpeed) {
+    if (this->velocity.y > this->maxFallSpeed)
+    {
         this->velocity.y = this->maxFallSpeed;
     }
 
@@ -148,7 +166,8 @@ void Player::updatePhysics() {
     this->sprite.move(0.f, this->velocity.y);
 
     // Check if the player has landed
-    if (this->sprite.getPosition().y + this->sprite.getGlobalBounds().height >= 640) { // Assuming ground level is at y = 640
+    if (this->sprite.getPosition().y + this->sprite.getGlobalBounds().height >= 640)
+    { // Assuming ground level is at y = 640
         this->velocity.y = 0.f;
         this->canJump = true;
         this->sprite.setPosition(this->sprite.getPosition().x, 640 - this->sprite.getGlobalBounds().height);
@@ -156,10 +175,12 @@ void Player::updatePhysics() {
 
     // Slowing down for smooth movement
     this->velocity *= this->decelerationRate;
-    if (std::abs(this->velocity.x) < this->minVelocity) {
+    if (std::abs(this->velocity.x) < this->minVelocity)
+    {
         this->velocity.x = 0.f;
     }
-    if (std::abs(this->velocity.y) < this->minVelocity) {
+    if (std::abs(this->velocity.y) < this->minVelocity)
+    {
         this->velocity.y = 0.f;
     }
 
@@ -207,6 +228,11 @@ void Player::updateAnimations()
             }
             this->sprite.setScale(-2.f, 2.f);
             this->sprite.setOrigin(this->sprite.getGlobalBounds().width / 2.f, 0.f); // we change the reference point for the flip to fix teleports on turn
+            break;
+
+        case MovementState::Fall:
+            this->sprite.setTexture(this->fallSheet);
+            this->currentFrame.left = 0;
             break;
 
         default:

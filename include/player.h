@@ -23,6 +23,7 @@ public:
 
     // exposed modifiers
     void resetVelocityY();
+    void resetVelocityX();
 
     // getters and setters
     void setPosition(const float x, const float y);
@@ -30,6 +31,7 @@ public:
     void setMovementState(MovementState value);
     inline const bool &getCanJump() const { return this->canJump; }
     inline void setCanJump(const bool value) { this->canJump = value; }
+
     void move(const float dir_x, const float dir_y);
     void jump();
 
@@ -65,4 +67,5 @@ private:
     sf::Sprite sprite;
     sf::Texture idleSheet;
     sf::Texture runSheet;
+    sf::Texture fallSheet;
 };

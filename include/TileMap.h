@@ -17,6 +17,8 @@ public:
     inline const unsigned &getTileSize() const { return this->tileSize; }
     void addTile(const unsigned x, const unsigned y, const sf::IntRect &textureRect, int level);
     void removeTile(const unsigned x, const unsigned y);
+    Tile *getTile(int level, int x, int y);
+
     void addLevel();
 
     void update();
@@ -24,4 +26,6 @@ public:
 
     int numberOfLevels = 1;
     int currentLevel = 0;
+    // const int LEVEL_W = 40;
+    // const int LEVEL_H = 50;
 };
