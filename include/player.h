@@ -26,9 +26,14 @@ public:
     void resetVelocityX();
 
     // getters and setters
+    sf::Vector2f getVelocity();
+
     void setPosition(const float x, const float y);
-    bool getMovementState();
+    sf::Vector2f getPosition();
+
+    MovementState getMovementState();
     void setMovementState(MovementState value);
+
     inline const bool &getCanJump() const { return this->canJump; }
     inline void setCanJump(const bool value) { this->canJump = value; }
 
@@ -60,6 +65,7 @@ private:
     float gravity;
     float maxFallSpeed;
     bool canJump;
+    sf::Clock jumpTimer;
 
     MovementState animationState;
     sf::Clock animationTimer;

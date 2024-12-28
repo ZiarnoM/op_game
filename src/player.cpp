@@ -51,13 +51,23 @@ void Player::resetVelocityX()
     this->velocity.x = 0.f;
 }
 
+sf::Vector2f Player::getVelocity()
+{
+    return this->velocity;
+}
+
 // getters and setters
 void Player::setPosition(const float x, const float y)
 {
     this->sprite.setPosition(x, y);
 }
 
-bool Player::getMovementState()
+sf::Vector2f Player::getPosition()
+{
+    return this->sprite.getPosition();
+}
+
+MovementState Player::getMovementState()
 {
     return this->animationState;
 }
@@ -110,6 +120,8 @@ void Player::initPhysics()
     this->gravity = 1.f;
     this->maxFallSpeed = 5.f;
     this->canJump = true;
+
+    this->jumpTimer.restart();
 }
 
 // Movement
@@ -125,8 +137,12 @@ void Player::move(const float dir_x, const float dir_y)
 
 void Player::jump()
 {
-    this->velocity.y = -35.f;
-    this->setCanJump(false);
+    if (this->jumpTimer.getElapsedTime().asMilliseconds() >= 400)
+    {
+        this->velocity.y = -35.f;
+        this->setCanJump(false);
+        this->jumpTimer.restart();
+    }
 }
 
 void Player::updateMovement()

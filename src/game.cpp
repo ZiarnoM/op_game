@@ -159,12 +159,12 @@ void Game::updatePlayerCollision()
                         this->player->setCanJump(true);
                         this->player->setPosition(playerBounds.left, tileBounds.top - playerBounds.height);
                     }
-                    else if (playerBounds.top > tileBounds.top && playerBounds.top + playerBounds.height > tileBounds.top + tileBounds.height && playerBounds.left < tileBounds.left + tileBounds.width && playerBounds.left + playerBounds.width > tileBounds.left)
-                    {
-                        // Collision from top
-                        this->player->resetVelocityY();
-                        this->player->setPosition(playerBounds.left, tileBounds.top + tileBounds.height);
-                    }
+                    // else if (playerBounds.top > tileBounds.top && playerBounds.top + playerBounds.height > tileBounds.top + tileBounds.height && playerBounds.left < tileBounds.left + tileBounds.width && playerBounds.left + playerBounds.width > tileBounds.left)
+                    // {
+                    //     // Collision from top
+                    //     this->player->resetVelocityY();
+                    //     this->player->setPosition(playerBounds.left, tileBounds.top + tileBounds.height);
+                    // }
                     else if (playerBounds.left < tileBounds.left && playerBounds.left + playerBounds.width < tileBounds.left + tileBounds.width && playerBounds.top < tileBounds.top + tileBounds.height && playerBounds.top + playerBounds.height > tileBounds.top)
                     {
                         // Collision from right
