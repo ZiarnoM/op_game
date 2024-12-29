@@ -13,6 +13,7 @@ Game::Game()
     this->initTileSheet();
     this->initTileMap();
     this->initMenus();
+    this->initClock();
     this->isMenuActive = true;
     this->currentMenu = startMenu;
 
@@ -78,6 +79,7 @@ void Game::processEvents()
                             }
                             else if (startMenu->isPlayButtonPressed(mousePos))
                             {
+                                this->clock.restart();
                                 this->isMenuActive = false;
                             }
                             else if (startMenu->isExitButtonPressed(mousePos))
@@ -96,6 +98,7 @@ void Game::processEvents()
                         {
                             if (finishScreen->isPlayAgainButtonPressed(mousePos))
                             {
+                                this->clock.restart();
                                 this->isMenuActive = false;
                                 this->tileMap->currentLevel = 0;
                                 this->player->setPosition(0, 0);
@@ -228,6 +231,9 @@ void Game::updateLevel()
         }
         else
         {
+            sf::Time current_time = clock.getElapsedTime();
+            this->times.push_back(current_time);
+            this->finishScreen->displayTimes(times, current_time);
             this->isMenuActive = true;
             this->currentMenu = finishScreen;
         }
@@ -292,6 +298,12 @@ void Game::initInput()
     this->keyboardMappings["MOVE_LEFT"] = sf::Keyboard::A;
     this->keyboardMappings["MOVE_RIGHT"] = sf::Keyboard::D;
     this->keyboardMappings["JUMP"] = sf::Keyboard::Space;
+}
+
+void Game::initClock()
+{
+    sf::Clock clock;
+    this->clock = clock;
 }
 
 void Game::updateInput()

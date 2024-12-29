@@ -1,5 +1,6 @@
 #pragma once
 #include <SFML/Graphics.hpp>
+#include <vector>
 #include "player.h"
 #include "map/TileMap.h"
 #include "menu/Menu.h"
@@ -23,6 +24,7 @@ private:
     void initTileMap();
     void initInput();
     void initBackground();
+    void initClock();
 
     // main loop handling
     void update();
@@ -62,9 +64,9 @@ private:
     Menu* currentMenu;
     bool isMenuActive;
 
-
+    sf::Clock clock;
 
     std::map<std::string, sf::Keyboard::Key> keyboardMappings;
 
-
+    std::vector<sf::Time> times;
 };
