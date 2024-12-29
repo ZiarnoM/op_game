@@ -16,7 +16,7 @@ target_link_libraries(op_game sfml-system sfml-window sfml-graphics)
 enable_testing()
 
 # Add testing framework (Catch2)
-find_package(Catch2 REQUIRED) # Ensure Catch2 is installed via vcpkg or other means
+#find_package(Catch2 REQUIRED) # Ensure Catch2 is installed via vcpkg or other means
 
 # Add a target for unit tests
 add_executable(op_game_tests
