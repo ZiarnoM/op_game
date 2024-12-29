@@ -1,5 +1,6 @@
 #include "LevelLoader.h"
 #include <fstream>
+#include <iostream>
 
 void LevelLoader::loadLevel(TileMap *tileMap, const std::string &filename)
 {
@@ -13,12 +14,13 @@ void LevelLoader::loadLevel(TileMap *tileMap, const std::string &filename)
     file.close();
 
     const auto &numberOfLevels = levelData["layers"].size();
-    for (int i = 0; i < numberOfLevels - 2; i++)
+    std::cout << "Number of levels: " << numberOfLevels << std::endl;
+    for (int i = 0; i < numberOfLevels - 1; i++)
     {
         tileMap->addLevel();
     }
 
-    for (int i = 0; i < numberOfLevels - 1; i++)
+    for (int i = 0; i < numberOfLevels; i++)
     {
         const auto &layer = levelData["layers"][i];
         const auto &tiles = layer["data"];
@@ -31,7 +33,7 @@ void LevelLoader::loadLevel(TileMap *tileMap, const std::string &filename)
             {
                 unsigned tileIndex = y * width + x;
                 unsigned tileId = tiles[tileIndex];
-                if (tileId != 6 && tileId != 0)
+                if (tileId != -1)
                 {
                     unsigned textureX = (tileId - 1) % 22 * tileMap->getTileSize();
                     unsigned textureY = (tileId - 1) / 22 * tileMap->getTileSize();
