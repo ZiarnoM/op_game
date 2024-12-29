@@ -14,6 +14,7 @@ Game::Game()
     this->initTileMap();
     this->initStartMenu();
     this->initOptionsMenu();
+    this->initFinishScreen();
     this->isMenuActive = false;
 }
 
@@ -80,6 +81,12 @@ void Game::processEvents()
                     else if (this->startMenu->isExitButtonPressed(mousePos))
                     {
                         this->window.close();
+                    }
+                    else if (this->finishScreen->isPlayAgainButtonPressed(mousePos))
+                    {
+                        this->isMenuActive = false;
+                        this->tileMap->currentLevel = 0;
+                        this->player->setPosition(0, 0);
                     }
                 }
             }
@@ -208,7 +215,8 @@ void Game::updateLevel()
         }
         else
         {
-            this->player->setPosition(this->window.getSize().x - this->player->getGlobalBounds().width, this->player->getGlobalBounds().top);
+            this->isMenuActive = true;
+            this->menuState = MenuState::FinishScreen;
         }
     }
 }
@@ -305,6 +313,11 @@ void Game::initOptionsMenu()
     this->optionsMenu = new OptionsMenu(800, 640);
 }
 
+void Game::initFinishScreen()
+{
+    this->finishScreen = new FinishScreen(800, 640);
+}
+
 void Game::updateMenu()
 {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
@@ -335,6 +348,10 @@ void Game::renderMenu()
     else if (menuState == MenuState::OptionsMenu)
     {
         optionsMenu->render(window);
+    }
+    else if (menuState == MenuState::FinishScreen)
+    {
+        finishScreen->render(window);
     }
     window.display();
 }

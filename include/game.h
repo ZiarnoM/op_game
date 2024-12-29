@@ -4,6 +4,7 @@
 #include "TileMap.h"
 #include "StartMenu.h"
 #include "OptionsMenu.h"
+#include "FinishScreen.h"
 
 class Game
 {
@@ -22,6 +23,7 @@ private:
     void initBackground();
     void initStartMenu();
     void initOptionsMenu();
+    void initFinishScreen();
 
     // main loop handling
     void update();
@@ -54,11 +56,15 @@ private:
     StartMenu *startMenu;
     bool isMenuActive;
     OptionsMenu *optionsMenu;
+    FinishScreen* finishScreen;
     enum class MenuState
     {
         StartMenu,
-        OptionsMenu
+        OptionsMenu,
+        FinishScreen
     } menuState;
+
+
 
     std::map<std::string, sf::Keyboard::Key> keyboardMappings;
 
