@@ -1,10 +1,11 @@
 #pragma once
 #include <SFML/Graphics.hpp>
-#include <player.h>
-#include "TileMap.h"
-#include "StartMenu.h"
-#include "OptionsMenu.h"
-#include "FinishScreen.h"
+#include "player.h"
+#include "map/TileMap.h"
+#include "menu/Menu.h"
+#include "menu/StartMenu.h"
+#include "menu/OptionsMenu.h"
+#include "menu/FinishScreen.h"
 
 class Game
 {
@@ -16,14 +17,12 @@ public:
 private:
     // initialization
     void initWindow();
+    void initMenus();
     void initPlayer();
     void initTileSheet();
     void initTileMap();
     void initInput();
     void initBackground();
-    void initStartMenu();
-    void initOptionsMenu();
-    void initFinishScreen();
 
     // main loop handling
     void update();
@@ -44,6 +43,10 @@ private:
     void renderBackground();
     void renderMenu();
 
+
+    void loadLevel(TileMap *tileMap, const std::string &filename);
+
+
     sf::RenderWindow window;
     Player *player;
 
@@ -54,19 +57,14 @@ private:
     sf::Sprite backgroundSprite;
 
     StartMenu *startMenu;
-    bool isMenuActive;
     OptionsMenu *optionsMenu;
     FinishScreen* finishScreen;
-    enum class MenuState
-    {
-        StartMenu,
-        OptionsMenu,
-        FinishScreen
-    } menuState;
+    Menu* currentMenu;
+    bool isMenuActive;
 
 
 
     std::map<std::string, sf::Keyboard::Key> keyboardMappings;
 
-    void loadLevel(TileMap *tileMap, const std::string &filename);
+
 };

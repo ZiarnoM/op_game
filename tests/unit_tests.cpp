@@ -1,6 +1,6 @@
 #define CATCH_CONFIG_MAIN
 #include <catch2/catch.hpp>
-#include <player.h>
+#include "game/player.h"
 
 TEST_CASE("Player resetVelocityY")
 {

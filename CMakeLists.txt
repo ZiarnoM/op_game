@@ -7,8 +7,11 @@ include_directories(include)
 
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
-file(GLOB SOURCES "src/*.cpp")
-add_executable(op_game ${SOURCES})
+file(GLOB_RECURSE SOURCES "src/*.cpp")
+add_executable(op_game ${SOURCES}
+        src/menu/Menu.cpp
+        include/menu/Menu.h)
+
 
 target_link_libraries(op_game sfml-system sfml-window sfml-graphics)
 
@@ -21,13 +24,13 @@ enable_testing()
 # Add a target for unit tests
 add_executable(op_game_tests
     tests/unit_tests.cpp
-    src/player.cpp
+        src/game/player.cpp
 )
 target_link_libraries(op_game_tests
     sfml-system
     sfml-window
     sfml-graphics
-    Catch2::Catch2
+#    Catch2::Catch2
 )
 
 # Register the tests with CTest

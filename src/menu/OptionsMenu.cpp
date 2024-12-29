@@ -1,4 +1,4 @@
-#include "OptionsMenu.h"
+#include "menu/OptionsMenu.h"
 
 OptionsMenu::OptionsMenu(float width, float height) {
     if(!this->font.loadFromFile("../assets/fonts/Arial.ttf")){
@@ -21,10 +21,11 @@ void OptionsMenu::render(sf::RenderWindow &window) {
     window.draw(backButton);
 }
 
+bool OptionsMenu::isButtonPressed(sf::Vector2i mousePos) {
+    return backButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
+}
+
+
 bool OptionsMenu::isBackButtonPressed(sf::Vector2i mousePos) {
-    sf::FloatRect backButtonBounds = backButton.getGlobalBounds();
-    if(backButtonBounds.contains(mousePos.x, mousePos.y)){
-        return true;
-    }
-    return false;
+    return backButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
 }

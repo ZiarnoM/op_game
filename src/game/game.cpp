@@ -1,6 +1,6 @@
-#include <game.h>
+#include "game/game.h"
 #include <iostream>
-#include "LevelLoader.h"
+#include "map/LevelLoader.h"
 
 // public methods
 
@@ -12,35 +12,27 @@ Game::Game()
     this->initPlayer();
     this->initTileSheet();
     this->initTileMap();
-    this->initStartMenu();
-    this->initOptionsMenu();
-    this->initFinishScreen();
-    this->isMenuActive = false;
+    this->initMenus();
+    this->isMenuActive = true;
+    this->currentMenu = startMenu;
+
 }
 
 Game::~Game()
 {
     delete this->player;
     delete this->tileMap;
+    delete startMenu;
 }
 
-void Game::run()
-{
-    while (this->window.isOpen())
-    {
+void Game::run() {
+    while (this->window.isOpen()) {
         this->processEvents();
-        if (this->isMenuActive)
-        {
-            this->updateMenu();
-            this->renderMenu();
-        }
-        else
-        {
-            this->update();
-            this->render();
-        }
+        this->update();
+        this->render();
     }
 }
+
 // initialization
 void Game::initWindow()
 {
@@ -51,6 +43,12 @@ void Game::initWindow()
 void Game::initPlayer()
 {
     this->player = new Player();
+}
+
+void Game::initMenus() {
+    this->startMenu = new StartMenu(800, 640);
+    this->optionsMenu = new OptionsMenu(800, 640);
+    this->finishScreen = new FinishScreen(800, 640);
 }
 
 // main loop handling
@@ -70,23 +68,39 @@ void Game::processEvents()
                 sf::Vector2i mousePos = sf::Mouse::getPosition(this->window);
                 if (event.mouseButton.button == sf::Mouse::Left)
                 {
-                    if (this->startMenu->isOptionButtonPressed(mousePos))
+                    if (currentMenu->isButtonPressed(mousePos))
                     {
-                        this->menuState = MenuState::OptionsMenu;
-                    }
-                    else if (this->startMenu->isPlayButtonPressed(mousePos))
-                    {
-                        this->isMenuActive = false;
-                    }
-                    else if (this->startMenu->isExitButtonPressed(mousePos))
-                    {
-                        this->window.close();
-                    }
-                    else if (this->finishScreen->isPlayAgainButtonPressed(mousePos))
-                    {
-                        this->isMenuActive = false;
-                        this->tileMap->currentLevel = 0;
-                        this->player->setPosition(0, 0);
+                        if (currentMenu == startMenu)
+                        {
+                            if (startMenu->isOptionButtonPressed(mousePos))
+                            {
+                                currentMenu = optionsMenu;
+                            }
+                            else if (startMenu->isPlayButtonPressed(mousePos))
+                            {
+                                this->isMenuActive = false;
+                            }
+                            else if (startMenu->isExitButtonPressed(mousePos))
+                            {
+                                this->window.close();
+                            }
+                        }
+                        else if (currentMenu == optionsMenu)
+                        {
+                            if (optionsMenu->isBackButtonPressed(mousePos))
+                            {
+                                currentMenu = startMenu;
+                            }
+                        }
+                        else if (currentMenu == finishScreen)
+                        {
+                            if (finishScreen->isPlayAgainButtonPressed(mousePos))
+                            {
+                                this->isMenuActive = false;
+                                this->tileMap->currentLevel = 0;
+                                this->player->setPosition(0, 0);
+                            }
+                        }
                     }
                 }
             }
@@ -96,19 +110,18 @@ void Game::processEvents()
             if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
             {
                 this->isMenuActive = true;
-                this->menuState = MenuState::StartMenu;
+                this->currentMenu = startMenu;
             }
         }
     }
 }
-
 void Game::render()
 {
     this->window.clear();
     this->renderBackground();
     if (this->isMenuActive)
     {
-        this->startMenu->draw(this->window);
+        this->renderMenu();
     }
     else
     {
@@ -216,7 +229,7 @@ void Game::updateLevel()
         else
         {
             this->isMenuActive = true;
-            this->menuState = MenuState::FinishScreen;
+            this->currentMenu = finishScreen;
         }
     }
 }
@@ -303,55 +316,27 @@ void Game::updateInput()
     }
 }
 
-void Game::initStartMenu()
-{
-    this->startMenu = new StartMenu(800, 640);
-}
-
-void Game::initOptionsMenu()
-{
-    this->optionsMenu = new OptionsMenu(800, 640);
-}
-
-void Game::initFinishScreen()
-{
-    this->finishScreen = new FinishScreen(800, 640);
-}
-
 void Game::updateMenu()
 {
     sf::Vector2i mousePos = sf::Mouse::getPosition(window);
 
-    if (menuState == MenuState::StartMenu)
+    if (currentMenu == startMenu)
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && startMenu->isOptionButtonPressed(mousePos))
         {
-            menuState = MenuState::OptionsMenu;
+            currentMenu = optionsMenu;
         }
     }
-    else if (menuState == MenuState::OptionsMenu)
+    else if (currentMenu == optionsMenu)
     {
         if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && optionsMenu->isBackButtonPressed(mousePos))
         {
-            menuState = MenuState::StartMenu;
+            currentMenu = startMenu;
         }
     }
 }
 
 void Game::renderMenu()
 {
-    window.clear();
-    if (menuState == MenuState::StartMenu)
-    {
-        startMenu->draw(window);
-    }
-    else if (menuState == MenuState::OptionsMenu)
-    {
-        optionsMenu->render(window);
-    }
-    else if (menuState == MenuState::FinishScreen)
-    {
-        finishScreen->render(window);
-    }
-    window.display();
+    currentMenu->render(this->window);
 }

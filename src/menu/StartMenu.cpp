@@ -1,4 +1,4 @@
-#include "StartMenu.h"
+#include "menu/StartMenu.h"
 
 StartMenu::StartMenu(float width, float height) {
     if (!font.loadFromFile("../assets/fonts/Arial.ttf")) {
@@ -15,10 +15,10 @@ StartMenu::StartMenu(float width, float height) {
     playButton.setCharacterSize(30);
     playButton.setPosition(width / 2 - playButton.getGlobalBounds().width / 2, height / 2);
 
-    optionsButton.setFont(font);
-    optionsButton.setString("Options");
-    optionsButton.setCharacterSize(30);
-    optionsButton.setPosition(width / 2 - optionsButton.getGlobalBounds().width / 2, height / 2 + 50);
+    optionButton.setFont(font);
+    optionButton.setString("Options");
+    optionButton.setCharacterSize(30);
+    optionButton.setPosition(width / 2 - optionButton.getGlobalBounds().width / 2, height / 2 + 50);
 
     exitButton.setFont(font);
     exitButton.setString("Exit");
@@ -26,16 +26,21 @@ StartMenu::StartMenu(float width, float height) {
     exitButton.setPosition(width / 2 - exitButton.getGlobalBounds().width / 2, height / 2 + 100);
 }
 
-void StartMenu::draw(sf::RenderWindow &window) {
+void StartMenu::render(sf::RenderWindow &window) {
     window.draw(title);
     window.draw(playButton);
-    window.draw(optionsButton);
+    window.draw(optionButton);
     window.draw(exitButton);
 }
 
+bool StartMenu::isButtonPressed(sf::Vector2i mousePos) {
+    return optionButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) ||
+           playButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos)) ||
+           exitButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
+}
 
 bool StartMenu::isOptionButtonPressed(sf::Vector2i mousePos) {
-    return optionsButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
+    return optionButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
 }
 
 bool StartMenu::isPlayButtonPressed(sf::Vector2i mousePos) {

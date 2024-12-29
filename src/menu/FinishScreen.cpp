@@ -1,4 +1,4 @@
-#include "FinishScreen.h"
+#include "menu/FinishScreen.h"
 #include<iostream>
 
 FinishScreen::FinishScreen(float width, float height) {
@@ -27,4 +27,8 @@ bool FinishScreen::isPlayAgainButtonPressed(sf::Vector2i mousePos) {
         return true;
     }
     return false;
+}
+
+bool FinishScreen::isButtonPressed(sf::Vector2i mousePos) {
+    return playAgainButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
 }

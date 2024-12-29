@@ -1,4 +1,4 @@
-#include "LevelLoader.h"
+#include "map/LevelLoader.h"
 #include <fstream>
 #include <iostream>
 
@@ -14,7 +14,7 @@ void LevelLoader::loadLevel(TileMap *tileMap, const std::string &filename)
     file.close();
 
     const auto &numberOfLevels = levelData["layers"].size();
-    std::cout << "Number of levels: " << numberOfLevels << std::endl;
+
     for (int i = 0; i < numberOfLevels - 1; i++)
     {
         tileMap->addLevel();
