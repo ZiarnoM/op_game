@@ -55,22 +55,29 @@ bool FinishScreen::isButtonPressed(sf::Vector2i mousePos) {
     return playAgainButton.getGlobalBounds().contains(static_cast<sf::Vector2f>(mousePos));
 }
 
-void FinishScreen::displayTimes(std::vector<sf::Time> times, sf::Time time)
+void FinishScreen::displayTimes(std::fstream& times, sf::Time time)
 {
-    std::sort(times.begin(), times.end(), [](const sf::Time& a, const sf::Time& b) {
-        return a < b;
-        });
-    currentTime.setString(std::to_string(time.asMilliseconds()));
-    if (times.size() > 2)
+    std::vector<int> sortedTimes;
+    times.seekg(0);
+    int singleTime;
+    while (times >> singleTime)
     {
-        bestTimes.setString(std::to_string(times[0].asMilliseconds()) + "\n" + std::to_string(times[1].asMilliseconds()) + "\n" + std::to_string(times[2].asMilliseconds()));
+        sortedTimes.push_back(singleTime);
     }
-    else if (times.size() == 2)
+    times.clear();
+    times.seekp(0, std::ios::end);
+    std::sort(sortedTimes.begin(), sortedTimes.end());
+    currentTime.setString(std::to_string(time.asMilliseconds()));
+    if (sortedTimes.size() > 2)
     {
-        bestTimes.setString(std::to_string(times[0].asMilliseconds()) + "\n" + std::to_string(times[1].asMilliseconds()));
+        bestTimes.setString(std::to_string(sortedTimes[0]) + "\n" + std::to_string(sortedTimes[1]) + "\n" + std::to_string(sortedTimes[2]));
+    }
+    else if (sortedTimes.size() == 2)
+    {
+        bestTimes.setString(std::to_string(sortedTimes[0]) + "\n" + std::to_string(sortedTimes[1]));
     }
     else
     {
-        bestTimes.setString(std::to_string(times[0].asMilliseconds()));
+        bestTimes.setString(std::to_string(sortedTimes[0]));
     }
 }

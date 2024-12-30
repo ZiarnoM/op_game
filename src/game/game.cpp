@@ -1,6 +1,6 @@
 #include "game/game.h"
-#include <iostream>
 #include "map/LevelLoader.h"
+#include <iostream>
 
 // public methods
 
@@ -24,6 +24,7 @@ Game::~Game()
     delete this->player;
     delete this->tileMap;
     delete startMenu;
+    this->times.close();
 }
 
 void Game::run() {
@@ -232,8 +233,8 @@ void Game::updateLevel()
         else
         {
             sf::Time current_time = clock.getElapsedTime();
-            this->times.push_back(current_time);
-            this->finishScreen->displayTimes(times, current_time);
+            this->times << current_time.asMilliseconds() << std::endl;
+            this->finishScreen->displayTimes(this->times, current_time);
             this->isMenuActive = true;
             this->currentMenu = finishScreen;
         }
@@ -304,6 +305,10 @@ void Game::initClock()
 {
     sf::Clock clock;
     this->clock = clock;
+    this->times.open("../assets/scores/times.txt", std::ios::in | std::ios::out | std::ios::app);
+    if (!times.is_open()) {
+        std::cerr << "Failed to open the scores file." << std::endl;
+    }    
 }
 
 void Game::updateInput()
