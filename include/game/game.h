@@ -1,6 +1,7 @@
 #pragma once
 #include <SFML/Graphics.hpp>
 #include <vector>
+#include <fstream>
 #include "player.h"
 #include "map/TileMap.h"
 #include "menu/Menu.h"
@@ -65,8 +66,7 @@ private:
     bool isMenuActive;
 
     sf::Clock clock;
+    std::fstream times;
 
     std::map<std::string, sf::Keyboard::Key> keyboardMappings;
-
-    std::vector<sf::Time> times;
 };
