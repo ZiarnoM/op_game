@@ -1,8 +1,6 @@
 #include "game/player.h"
 #include <iostream>
 
-// Public
-// constructors and destructors
 Player::Player()
 {
     this->initVariables();
@@ -16,7 +14,6 @@ Player::~Player()
 {
 }
 
-// general methods
 void Player::update()
 {
     this->updateMovement();
@@ -40,7 +37,6 @@ const sf::FloatRect Player::getGlobalBounds() const
     return this->sprite.getGlobalBounds();
 }
 
-// modifiers
 void Player::resetVelocityY()
 {
     this->velocity.y = 0.f;
@@ -56,7 +52,6 @@ sf::Vector2f Player::getVelocity()
     return this->velocity;
 }
 
-// getters and setters
 void Player::setPosition(const float x, const float y)
 {
     this->sprite.setPosition(x, y);
@@ -77,8 +72,6 @@ void Player::setMovementState(MovementState value)
     this->animationState = value;
 }
 
-// Private
-// initialization
 void Player::initVariables()
 {
 }
@@ -98,6 +91,7 @@ void Player::initTextures()
         std::cerr << "Error while loading fall.png" << std::endl;
     }
 }
+
 void Player::initSprite()
 {
     this->sprite.setTexture(this->idleSheet);
@@ -105,6 +99,7 @@ void Player::initSprite()
     this->sprite.setTextureRect(this->currentFrame);
     this->sprite.setScale(2.f, 2.f);
 }
+
 void Player::initAnimations()
 {
     this->animationState = MovementState::Idle;
@@ -120,11 +115,9 @@ void Player::initPhysics()
     this->gravity = 1.f;
     this->maxFallSpeed = 5.f;
     this->canJump = true;
-
     this->jumpTimer.restart();
 }
 
-// Movement
 void Player::move(const float dir_x, const float dir_y)
 {
     this->velocity.x += dir_x * this->accelerationRate;
@@ -171,25 +164,21 @@ void Player::updateMovement()
 
 void Player::updatePhysics()
 {
-    // Apply gravity
     this->velocity.y += this->gravity;
     if (this->velocity.y > this->maxFallSpeed)
     {
         this->velocity.y = this->maxFallSpeed;
     }
 
-    // Update position
     this->sprite.move(0.f, this->velocity.y);
 
-    // Check if the player has landed
     if (this->sprite.getPosition().y + this->sprite.getGlobalBounds().height >= 640)
-    { // Assuming ground level is at y = 640
+    {
         this->velocity.y = 0.f;
         this->canJump = true;
         this->sprite.setPosition(this->sprite.getPosition().x, 640 - this->sprite.getGlobalBounds().height);
     }
 
-    // Slowing down for smooth movement
     this->velocity *= this->decelerationRate;
     if (std::abs(this->velocity.x) < this->minVelocity)
     {
@@ -203,7 +192,6 @@ void Player::updatePhysics()
     this->sprite.move(this->velocity);
 }
 
-// Animations
 void Player::updateAnimations()
 {
     const float MAX_LEFT_IDLE = 320.f;

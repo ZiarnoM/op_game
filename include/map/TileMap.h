@@ -26,6 +26,4 @@ public:
 
     int numberOfLevels = 1;
     int currentLevel = 0;
-    // const int LEVEL_W = 40;
-    // const int LEVEL_H = 50;
 };

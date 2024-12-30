@@ -16,16 +16,13 @@ public:
     Player();
     virtual ~Player();
 
-    // general methods
     void update();
     void render(sf::RenderTarget &target);
     const sf::FloatRect getGlobalBounds() const;
 
-    // exposed modifiers
     void resetVelocityY();
     void resetVelocityX();
 
-    // getters and setters
     sf::Vector2f getVelocity();
 
     void setPosition(const float x, const float y);
@@ -41,22 +38,17 @@ public:
     void jump();
 
 private:
-    // initialization
     void initVariables();
     void initTextures();
     void initSprite();
     void initAnimations();
     void initPhysics();
 
-    // Movement
-
     void updateMovement();
     void updatePhysics();
 
-    // Animations
     void updateAnimations();
 
-    // fields
     sf::Vector2f velocity;
     float minVelocity;
     float maxVelocity;
