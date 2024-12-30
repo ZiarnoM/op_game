@@ -2,8 +2,6 @@
 #include "map/LevelLoader.h"
 #include <iostream>
 
-// public methods
-
 Game::Game()
 {
     this->initWindow();
@@ -35,7 +33,6 @@ void Game::run() {
     }
 }
 
-// initialization
 void Game::initWindow()
 {
     this->window.create(sf::VideoMode(800, 640), "OP Game");
@@ -53,7 +50,6 @@ void Game::initMenus() {
     this->finishScreen = new FinishScreen(800, 640);
 }
 
-// main loop handling
 void Game::processEvents()
 {
     sf::Event event;
@@ -147,7 +143,6 @@ void Game::update()
     }
 }
 
-// player stuff
 void Game::updatePlayer()
 {
     this->player->update();
@@ -162,7 +157,6 @@ void Game::updatePlayerCollision()
             this->player->getGlobalBounds().left,
             this->window.getSize().y - this->player->getGlobalBounds().height);
     }
-    // Check for collision with tiles
     for (int x = 0; x < 50; ++x)
     {
         for (int y = 0; y < 40; ++y)
@@ -175,7 +169,6 @@ void Game::updatePlayerCollision()
 
                 if (playerBounds.intersects(tileBounds))
                 {
-                    // Handle collision
                     if (playerBounds.top < tileBounds.top && playerBounds.top + playerBounds.height < tileBounds.top + tileBounds.height && playerBounds.left < tileBounds.left + tileBounds.width && playerBounds.left + playerBounds.width > tileBounds.left)
                     {
                         // Collision from bottom
@@ -183,12 +176,6 @@ void Game::updatePlayerCollision()
                         this->player->setCanJump(true);
                         this->player->setPosition(playerBounds.left, tileBounds.top - playerBounds.height);
                     }
-                    // else if (playerBounds.top > tileBounds.top && playerBounds.top + playerBounds.height > tileBounds.top + tileBounds.height && playerBounds.left < tileBounds.left + tileBounds.width && playerBounds.left + playerBounds.width > tileBounds.left)
-                    // {
-                    //     // Collision from top
-                    //     this->player->resetVelocityY();
-                    //     this->player->setPosition(playerBounds.left, tileBounds.top + tileBounds.height);
-                    // }
                     else if (playerBounds.left < tileBounds.left && playerBounds.left + playerBounds.width < tileBounds.left + tileBounds.width && playerBounds.top < tileBounds.top + tileBounds.height && playerBounds.top + playerBounds.height > tileBounds.top)
                     {
                         // Collision from right
@@ -211,7 +198,6 @@ void Game::updateLevel()
 {
     if (this->player->getGlobalBounds().left < 0.f)
     {
-        // check for level numbe
         if (this->tileMap->currentLevel > 0)
         {
             this->tileMap->currentLevel--;
@@ -224,7 +210,6 @@ void Game::updateLevel()
     }
     if (this->player->getGlobalBounds().left + this->player->getGlobalBounds().width > this->window.getSize().x)
     {
-        //        check for level number and teleport to next level on left side
         if (this->tileMap->currentLevel < this->tileMap->numberOfLevels - 1)
         {
             this->tileMap->currentLevel++;

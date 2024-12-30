@@ -55,17 +55,6 @@ void TileMap::addLevel()
     numberOfLevels++;
 }
 
-// void TileMap::removeTile(const unsigned x, const unsigned y) {
-//     if(x<this->map.size() && y<this->map[x].size()){
-//         if(this->map[x][y]){
-//             if(this->map[x][y] != nullptr){
-//                 delete this->map[x][y];
-//                 this->map[x][y] = nullptr;
-//             }
-//         }
-//     }
-// }
-
 void TileMap::update()
 {
     for (auto &x : this->map[currentLevel])

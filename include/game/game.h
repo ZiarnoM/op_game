@@ -17,7 +17,6 @@ public:
     void run();
 
 private:
-    // initialization
     void initWindow();
     void initMenus();
     void initPlayer();
@@ -27,12 +26,10 @@ private:
     void initBackground();
     void initClock();
 
-    // main loop handling
     void update();
     void render();
     void processEvents();
 
-    // updates
     void updatePlayer();
     void updatePlayerCollision();
     void updateLevel();
@@ -40,7 +37,6 @@ private:
     void updateInput();
     void updateMenu();
 
-    // renders
     void renderPlayer();
     void renderTileMap();
     void renderBackground();
