@@ -8,9 +8,7 @@ include_directories(include)
 find_package(SFML 2.5 COMPONENTS graphics audio REQUIRED)
 
 file(GLOB_RECURSE SOURCES "src/*.cpp")
-add_executable(op_game ${SOURCES}
-        src/menu/Menu.cpp
-        include/menu/Menu.h)
+add_executable(op_game ${SOURCES})
 
 
 target_link_libraries(op_game sfml-system sfml-window sfml-graphics)
@@ -19,7 +17,7 @@ target_link_libraries(op_game sfml-system sfml-window sfml-graphics)
 enable_testing()
 
 # Add testing framework (Catch2)
-#find_package(Catch2 REQUIRED) # Ensure Catch2 is installed via vcpkg or other means
+find_package(Catch2 REQUIRED) # Ensure Catch2 is installed via vcpkg or other means
 
 # Add a target for unit tests
 add_executable(op_game_tests
@@ -30,7 +28,7 @@ target_link_libraries(op_game_tests
     sfml-system
     sfml-window
     sfml-graphics
-#    Catch2::Catch2
+    Catch2::Catch2WithMain
 )
 
 # Register the tests with CTest
